@@ -15,21 +15,24 @@ const FormLogin = () => {
     <View style={login.contenedor}>
       <Text style={login.titulo}>Inicio de Sesión</Text>
       <View style={login.form_cont}>
+        <Text style={login.texto}>Email</Text>
         <TextInput
-          placeholder="correo"
+          placeholder="Ingresa tu email"
           value={correo}
           onChangeText={setCorreo}
           style={login.input}
         />
+        <Text style={login.texto}>Contraseña</Text>
+
         <TextInput
-          placeholder="contraseña"
+          placeholder="Ingresa tu contraseña"
           secureTextEntry={true}
           value={password}
           onChangeText={setPassword}
           style={login.input}
         />
         <TouchableOpacity style={login.enviar_btn} onPress={isLogin}>
-          <Text>Enviar</Text>
+          <Text style={login.texto_btn}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>
     </View>

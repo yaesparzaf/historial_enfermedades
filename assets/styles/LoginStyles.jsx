@@ -3,31 +3,36 @@ import {StyleSheet} from 'react-native';
 const login = StyleSheet.create({
   contenedor: {
     flex: 0.5,
-    width: 300,
+    width: '80%',
   },
   titulo: {
     fontSize: 30,
-    textAlign: 'center',
   },
   form_cont: {
-    alignItems: 'center',
     marginTop: 20,
     marginBottom: 20,
     //backgroundColor: 'blue',
   },
+  texto: {
+    color: 'rgb(0, 130, 252)',
+    fontWeight: 'bold',
+  },
   input: {
-    width: 250,
+    width: '100%',
     marginBottom: 20,
-    borderRadius: 30,
-    borderWidth: 1,
+    borderBottomWidth: 1,
   },
   enviar_btn: {
-    width: 250,
+    width: '100%',
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    borderRadius: 5,
     backgroundColor: 'rgb(0, 130, 252)',
+  },
+  texto_btn: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
 export default login;
