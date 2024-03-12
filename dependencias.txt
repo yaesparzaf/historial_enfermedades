@@ -1,0 +1,5 @@
+chocolatey
+SDK 34
+npm start
+npm run android
+cambiar prettier VSC a LF
