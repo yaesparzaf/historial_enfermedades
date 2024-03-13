@@ -2,10 +2,15 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import React from 'react';
 import FormLogin from '../components/FormLogin';
 
-const Login = () => {
+const Login = ({onLogin}) => {
+  const logeado = respuesta => {
+    if (respuesta !== null) {
+      onLogin(respuesta);
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
-      <FormLogin />
+      <FormLogin onLogin={logeado} />
     </SafeAreaView>
   );
 };

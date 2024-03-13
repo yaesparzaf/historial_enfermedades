@@ -5,18 +5,31 @@ import {useNavigation} from '@react-navigation/native';
 import PutCache from '../cache/PutCache';
 import {getUsuario} from '../../db/bdd';
 
-const FormLogin = () => {
+const FormLogin = ({onLogin}) => {
   const navegacion = useNavigation();
   const [correo, setCorreo] = useState('');
   const [password, setPassword] = useState('');
-  const [respuesta, setRespuesta] = useState();
+  const [correoValido, setCorreoValido] = useState(false);
+  const [passValido, setPassValido] = useState(false);
+
+  const validarEmail = text => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(text);
+  };
+
+  const isValido = text => {
+    setCorreo(text);
+    setCorreoValido(validarEmail(text));
+  };
 
   const isLogin = async () => {
     getUsuario(correo, password, async existe => {
       if (existe) {
+        // navegacion.navigate('Listado');
         try {
           await PutCache({key: 'usuario', datos: {correo, password}});
-          navegacion.navigate('Listado');
+          console.log(existe);
+          onLogin(existe);
         } catch (error) {
           console.error('Error al guardar en la caché:', error);
         }
@@ -32,8 +45,10 @@ const FormLogin = () => {
         <Text style={login.texto}>Email</Text>
         <TextInput
           placeholder="Ingresa tu email"
+          keyboardType="email-address"
           value={correo}
-          onChangeText={setCorreo}
+          maxLength={100}
+          onChangeText={isValido}
           style={login.input}
         />
         <Text style={login.texto}>Contraseña</Text>
@@ -41,11 +56,24 @@ const FormLogin = () => {
         <TextInput
           placeholder="Ingresa tu contraseña"
           secureTextEntry={true}
+          maxLength={100}
           value={password}
-          onChangeText={setPassword}
+          onChangeText={texto => {
+            setPassword(texto);
+            setPassValido(texto.length > 2);
+          }}
           style={login.input}
         />
-        <TouchableOpacity style={login.enviar_btn} onPress={isLogin}>
+        <TouchableOpacity
+          disabled={!correoValido || !passValido}
+          style={{
+            ...login.enviar_btn,
+            backgroundColor:
+              correoValido && passValido
+                ? login.enviar_btn.backgroundColor
+                : 'grey',
+          }}
+          onPress={isLogin}>
           <Text style={login.texto_btn}>Iniciar Sesión</Text>
         </TouchableOpacity>
       </View>
