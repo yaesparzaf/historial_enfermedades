@@ -13,6 +13,7 @@ npm run android
 cambiar prettier VSC a LF
 npm install @react-native-async-storage/async-storage
 npm install react-native-sqlite-storage
+npm install react-native-image-picker
 
 email: jhon@mail.com
 contraseña: 77@1$
