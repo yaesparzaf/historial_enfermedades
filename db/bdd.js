@@ -9,7 +9,7 @@ const db = SQLite.openDatabase(
 const crearTabla = () => {
   db.transaction(tx => {
     tx.executeSql(
-      'CREATE TABLE IF NOT EXISTS historial (id INTEGER PRIMARY KEY AUTOINCREMENT, fecha DATE, paciente TEXT, doctor TEXT, telefono TEXT, malestar TEXT, imagen TEXT)',
+      'CREATE TABLE IF NOT EXISTS historial (id INTEGER PRIMARY KEY AUTOINCREMENT, fecha TEXT, paciente TEXT, doctor TEXT, telefono TEXT, malestar TEXT, imagen TEXT)',
     );
   });
   db.transaction(tx => {

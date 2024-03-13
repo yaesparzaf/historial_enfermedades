@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 const listado = StyleSheet.create({
   listado_cont: {
     flex: 1,
-    backgroundColor: 'red',
   },
   logout_btn: {
     marginRight: 10,

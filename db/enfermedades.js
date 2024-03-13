@@ -13,8 +13,16 @@ const insertarEnfermedad = (
     tx.executeSql(
       'INSERT INTO historial (fecha, paciente, doctor, telefono, malestar, imagen) VALUES (?, ?, ?, ?, ?, ?)',
       [fecha, paciente, doctor, telefono, malestar, imagen],
-      (_, {ren}) => {
-        callback(ren.insertId);
+      (_, {renScritos, insertId}) => {
+        if (renScritos > 0) {
+          callback(insertId);
+        } else {
+          console.error(
+            'No se pudo insertar el registro en la tabla historial',
+            insertId,
+            renScritos,
+          );
+        }
       },
       error => {
         console.error('Error al insertar registro en el historial:', error);

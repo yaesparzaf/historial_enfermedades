@@ -1,14 +1,10 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  Alert,
-  TouchableOpacity,
-  StyleSheet,
-} from 'react-native';
+import {View, Text, TextInput, Button} from 'react-native';
 import DatePicker from 'react-native-date-picker';
+import AbrirCamara from './AbrirCamara';
+import {ScrollView} from 'react-native-gesture-handler';
+import registro from '../styles/RegistroStyles';
+import {insertarEnfermedad} from '../../db/enfermedades';
 
 const FormEnfermedad = () => {
   const [fecha, setFecha] = useState(new Date());
@@ -21,9 +17,9 @@ const FormEnfermedad = () => {
   const [open, setOpen] = useState(false);
 
   const guardar = () => {
-    // Validación de los campos
     let errors = {};
     let isValid = true;
+    let fechaString;
 
     if (!fecha) {
       errors.fecha = 'Fecha es requerida';
@@ -59,17 +55,46 @@ const FormEnfermedad = () => {
       setErrors(errors);
       return;
     }
+    if (fecha) {
+      fechaString = fecha.toISOString();
+    }
+    console.log(
+      'todo lo que se recibe es: ',
+      typeof fechaString,
+      typeof paciente,
+      typeof telefono,
+      typeof doctor,
+      typeof malestar,
+      typeof imagen,
+    );
+    if (fechaString && paciente && doctor && telefono && malestar && imagen) {
+      console.log('entra al if donde se inserta');
+      insertarEnfermedad(
+        fechaString,
+        paciente,
+        doctor,
+        telefono,
+        malestar,
+        imagen,
+        insertId => {
+          console.log(
+            `Registro insertado en la base de datos con ID: ${insertId}`,
+          );
+        },
+      );
+    }
+  };
 
-    // Si todo está correcto, continuar con el proceso de guardar
-    // Aquí podrías guardar los datos en la base de datos o hacer lo que sea necesario
-    // Por ahora, solo mostramos una alerta
-    Alert.alert('Registro guardado correctamente');
-    // Redirigir a la vista Listado
+  const getImagen = uri => {
+    if (uri) {
+      setImagen(uri);
+      console.log('la uri: ', uri);
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.texto}>Fecha</Text>
+    <ScrollView>
+      <Text style={registro.texto}>Fecha</Text>
       <Button title="Open" onPress={() => setOpen(true)} />
       <DatePicker
         modal
@@ -83,104 +108,54 @@ const FormEnfermedad = () => {
           setOpen(false);
         }}
       />
-      {errors.fecha && <Text style={styles.error}>{errors.fecha}</Text>}
+      {errors.fecha && <Text style={registro.error}>{errors.fecha}</Text>}
 
-      <Text style={styles.texto}>Paciente</Text>
+      <Text style={registro.texto}>Paciente</Text>
       <TextInput
-        style={styles.input}
+        style={registro.input}
         maxLength={150}
         value={paciente}
         onChangeText={text => setPaciente(text)}
       />
-      {errors.paciente && <Text style={styles.error}>{errors.paciente}</Text>}
+      {errors.paciente && <Text style={registro.error}>{errors.paciente}</Text>}
 
-      <Text style={styles.texto}>Doctor</Text>
+      <Text style={registro.texto}>Doctor</Text>
       <TextInput
-        style={styles.input}
+        style={registro.input}
         maxLength={150}
         value={doctor}
         onChangeText={text => setDoctor(text)}
       />
-      {errors.doctor && <Text style={styles.error}>{errors.doctor}</Text>}
+      {errors.doctor && <Text style={registro.error}>{errors.doctor}</Text>}
 
-      <Text style={styles.texto}>Teléfono</Text>
+      <Text style={registro.texto}>Teléfono</Text>
       <TextInput
-        style={styles.input}
+        style={registro.input}
         maxLength={10}
         value={telefono}
         onChangeText={text => setTelefono(text)}
         keyboardType="numeric"
       />
-      {errors.telefono && <Text style={styles.error}>{errors.telefono}</Text>}
+      {errors.telefono && <Text style={registro.error}>{errors.telefono}</Text>}
 
-      <Text style={styles.texto}>Malestar</Text>
+      <Text style={registro.texto}>Malestar</Text>
       <TextInput
-        style={styles.input_malestar}
+        style={registro.input_malestar}
         maxLength={1024}
         numberOfLines={4}
         textAlignVertical="top"
         value={malestar}
         onChangeText={text => setMalestar(text)}
       />
-      {errors.malestar && <Text style={styles.error}>{errors.malestar}</Text>}
-
-      <TouchableOpacity
-        style={[styles.button, {backgroundColor: '#007bff'}]}
-        onPress={() => {} /* Agregar lógica para capturar la imagen */}>
-        <Text style={styles.buttonText}>Capturar</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.texto}>Imagen</Text>
-      <TextInput
-        style={styles.input}
-        value={imagen}
-        onChangeText={text => setImagen(text)}
-      />
-      {errors.imagen && <Text style={styles.error}>{errors.imagen}</Text>}
+      {errors.malestar && <Text style={registro.error}>{errors.malestar}</Text>}
+      <View>
+        <AbrirCamara uriImagen={getImagen} />
+      </View>
+      {errors.imagen && <Text style={registro.error}>{errors.imagen}</Text>}
 
       <Button title="Guardar" onPress={guardar} />
-    </View>
+    </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
-  texto: {
-    color: '#007bff',
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderBottomWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  input_malestar: {
-    height: 100,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 10,
-  },
-  button: {
-    backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontWeight: 'bold',
-  },
-});
 
 export default FormEnfermedad;

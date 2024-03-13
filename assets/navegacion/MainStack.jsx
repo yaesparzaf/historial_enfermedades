@@ -32,7 +32,6 @@ const MainStack = () => {
       if (usuario_cache) {
         setUsuario(usuario_cache);
         setIsAuthenticated(true);
-        console.log('cache con usuario');
       } else {
         setUsuario(null);
       }
@@ -45,7 +44,6 @@ const MainStack = () => {
   useEffect(() => {
     setIsAuthenticated(usuario !== null);
   }, [usuario]);
-  console.log('isAuth: ', isAuthenticated);
 
   const isLogin = onlogin => {
     setIsAuthenticated(onlogin);

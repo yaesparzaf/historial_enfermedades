@@ -7,6 +7,7 @@ import {useNavigation} from '@react-navigation/native';
 import {contexUser} from '../../db/AuthenticatedUserProvider';
 import FloatButton from '../components/FloatButton';
 import listado from '../styles/ListadoStyles';
+import Historial from '../components/Historial';
 
 const Listado = () => {
   const navegacion = useNavigation();
@@ -30,11 +31,9 @@ const Listado = () => {
   };
   return (
     <SafeAreaView style={listado.listado_cont}>
-      <TouchableOpacity onPress={aLogin} style={{backgroundColor: 'red'}}>
-        <Text>Eliminar Cache</Text>
-      </TouchableOpacity>
+      <Historial />
       <TouchableOpacity onPress={deleteTabla}>
-        <Text>Borrar tabla</Text>
+        <Text>eliminar</Text>
       </TouchableOpacity>
       <FloatButton />
     </SafeAreaView>
