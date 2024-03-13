@@ -48,8 +48,6 @@ const getUsuario = (email, password, callback) => {
         }
       },
       error => {
-        console.error('Error al verificar credenciales:', error);
-        // Si ocurre un error, asumimos que las credenciales son inválidas
         callback(false);
       },
     );
@@ -59,7 +57,7 @@ const getUsuario = (email, password, callback) => {
 const eliminarTabla = () => {
   db.transaction(tx => {
     tx.executeSql(
-      'DROP TABLE IF EXISTS usuario',
+      'DROP TABLE IF EXISTS historial',
       [],
       () => {
         console.log('Tabla de usuarios eliminada correctamente.');

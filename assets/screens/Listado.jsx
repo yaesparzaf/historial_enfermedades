@@ -15,7 +15,6 @@ const Listado = () => {
   useEffect(() => {
     const obtenerDatos = async () => {
       const cache = await GetAlls();
-      console.log('datos: ', cache);
     };
     obtenerDatos();
   }, []);
@@ -32,7 +31,7 @@ const Listado = () => {
   return (
     <SafeAreaView style={listado.listado_cont}>
       <Historial />
-      <TouchableOpacity onPress={deleteTabla}>
+      <TouchableOpacity onPress={(deleteTabla, aLogin)}>
         <Text>eliminar</Text>
       </TouchableOpacity>
       <FloatButton />
