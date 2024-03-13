@@ -5,9 +5,16 @@ import Login from '../screens/Login';
 import {NavigationContainer} from '@react-navigation/native';
 import {AuthenticatedUserContex} from '../../db/AuthenticatedUserProvider';
 import GetCache from '../cache/GetCache';
-import {ActivityIndicator, SafeAreaView} from 'react-native';
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import login from '../styles/LoginStyles';
-import {crearTabla} from '../../db/Bdd';
+import {crearTabla} from '../../db/bdd';
+import listado from '../styles/ListadoStyles';
+import LogOut from '../components/LogOut';
 
 const Stack = createStackNavigator();
 
