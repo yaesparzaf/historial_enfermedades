@@ -1,6 +1,11 @@
 import {StyleSheet} from 'react-native';
 
 const login = StyleSheet.create({
+  loading: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
   contenedor: {
     flex: 0.5,
     width: '80%',
