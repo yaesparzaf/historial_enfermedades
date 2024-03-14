@@ -1,5 +1,4 @@
 import {db} from './bdd';
-
 const insertarEnfermedad = (
   fecha,
   paciente,
@@ -13,16 +12,8 @@ const insertarEnfermedad = (
     tx.executeSql(
       'INSERT INTO historial (fecha, paciente, doctor, telefono, malestar, imagen) VALUES (?, ?, ?, ?, ?, ?)',
       [fecha, paciente, doctor, telefono, malestar, imagen],
-      (_, {renScritos, insertId}) => {
-        if (renScritos > 0) {
-          callback(insertId);
-        } else {
-          console.error(
-            'No se pudo insertar el registro en la tabla historial',
-            insertId,
-            renScritos,
-          );
-        }
+      (_, ren) => {
+        callback(ren);
       },
       error => {
         console.error('Error al insertar registro en el historial:', error);
@@ -33,10 +24,49 @@ const insertarEnfermedad = (
 
 const getAllItems = callback => {
   db.transaction(tx => {
-    tx.executeSql('SELECT * FROM historial', [], (_, {ren}) => {
-      callback(ren._array);
+    tx.executeSql('SELECT * FROM historial', [], (_, resultados) => {
+      var temp = [];
+      for (let i = 0; i < resultados.rows.length; ++i) {
+        temp.push(resultados.rows.item(i));
+      }
+      callback(temp);
     });
   });
 };
 
-export {insertarEnfermedad, getAllItems};
+const getItem = (consulta, callback) => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `SELECT * FROM historial 
+      WHERE paciente LIKE ? OR doctor LIKE ? OR malestar LIKE ?`,
+      [`%${consulta}%`, `%${consulta}%`, `%${consulta}%`],
+      (_, resultados) => {
+        var temp = [];
+        for (let i = 0; i < resultados.rows.length; ++i) {
+          temp.push(resultados.rows.item(i));
+        }
+        callback(temp);
+      },
+    );
+  });
+};
+
+const eliminarTodoDeTabla = callback => {
+  db.transaction(tx => {
+    tx.executeSql(
+      `DELETE FROM historial`,
+      [],
+      (_, resultado) => {
+        callback(resultado.rowsAffected);
+      },
+      error => {
+        console.error(
+          `Error al eliminar todos los registros de la tabla historial`,
+          error,
+        );
+      },
+    );
+  });
+};
+
+export {insertarEnfermedad, getAllItems, getItem, eliminarTodoDeTabla};

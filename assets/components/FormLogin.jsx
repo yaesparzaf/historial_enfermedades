@@ -28,7 +28,7 @@ const FormLogin = ({onLogin}) => {
         // navegacion.navigate('Listado');
         try {
           await PutCache({key: 'usuario', datos: {correo, password}});
-          console.log(existe);
+
           onLogin(existe);
         } catch (error) {
           console.error('Error al guardar en la caché:', error);

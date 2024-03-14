@@ -5,8 +5,10 @@ import AbrirCamara from './AbrirCamara';
 import {ScrollView} from 'react-native-gesture-handler';
 import registro from '../styles/RegistroStyles';
 import {insertarEnfermedad} from '../../db/enfermedades';
+import {useNavigation} from '@react-navigation/native';
 
 const FormEnfermedad = () => {
+  const navegacion = useNavigation();
   const [fecha, setFecha] = useState(new Date());
   const [paciente, setPaciente] = useState('');
   const [doctor, setDoctor] = useState('');
@@ -58,17 +60,7 @@ const FormEnfermedad = () => {
     if (fecha) {
       fechaString = fecha.toISOString();
     }
-    console.log(
-      'todo lo que se recibe es: ',
-      typeof fechaString,
-      typeof paciente,
-      typeof telefono,
-      typeof doctor,
-      typeof malestar,
-      typeof imagen,
-    );
     if (fechaString && paciente && doctor && telefono && malestar && imagen) {
-      console.log('entra al if donde se inserta');
       insertarEnfermedad(
         fechaString,
         paciente,
@@ -76,19 +68,17 @@ const FormEnfermedad = () => {
         telefono,
         malestar,
         imagen,
-        insertId => {
-          console.log(
-            `Registro insertado en la base de datos con ID: ${insertId}`,
-          );
-        },
       );
     }
+    navegacion.navigate('Home', {
+      screen: 'Listado',
+      params: {reload: true},
+    });
   };
 
   const getImagen = uri => {
     if (uri) {
       setImagen(uri);
-      console.log('la uri: ', uri);
     }
   };
 

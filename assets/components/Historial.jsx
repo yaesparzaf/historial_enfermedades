@@ -1,58 +1,43 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, StyleSheet} from 'react-native';
-import {getAllItems} from '../../db/enfermedades';
-
-const Historial = () => {
+import {getAllItems, getItem} from '../../db/enfermedades';
+import Info from './Info';
+const Historial = ({reload, buscar}) => {
   const [historial, setHistorial] = useState([]);
+  const [recargar, setRecargar] = useState(false);
 
   useEffect(() => {
+    setRecargar(reload);
+    const obtenerHistorial = () => {
+      if (buscar) {
+        getItem(buscar, items => {
+          setHistorial(items);
+        });
+      } else {
+        getAllItems(items => {
+          setHistorial(items);
+        });
+      }
+    };
     obtenerHistorial();
-  }, []);
-
-  const obtenerHistorial = () => {
-    getAllItems(items => {
-      setHistorial(items);
-    });
-  };
-  if (historial) {
-    console.log('hisotiral: ', historial);
-  }
-  const renderItem = ({item}) => (
-    <View style={styles.item}>
-      {Object.keys(item).map(key => (
-        <Text style={styles.texto} key={key}>
-          {key}: {item[key]}
-        </Text>
-      ))}
-    </View>
-  );
+  }, [reload, buscar, recargar]);
 
   return (
     <View style={styles.container}>
       <FlatList
         data={historial}
-        renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => <Info info={item} recarga={recargar} />}
       />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     paddingTop: 20,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    borderRadius: 10,
-  },
-  texto: {
-    fontSize: 18,
   },
 });
 

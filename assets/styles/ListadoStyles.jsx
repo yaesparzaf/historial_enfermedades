@@ -4,6 +4,9 @@ const listado = StyleSheet.create({
   listado_cont: {
     flex: 1,
   },
+  busquedaInput: {
+    backgroundColor: 'red',
+  },
   logout_btn: {
     marginRight: 10,
   },

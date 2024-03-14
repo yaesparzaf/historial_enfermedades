@@ -1,39 +1,59 @@
-import {View, Text, TouchableOpacity, SafeAreaView} from 'react-native';
-import React, {useEffect} from 'react';
+import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import GetAlls from '../cache/GetAlls';
-import {eliminarTabla} from '../../db/bdd';
 import RemoveCache from '../cache/RemoveCache';
 import {useNavigation} from '@react-navigation/native';
 import {contexUser} from '../../db/AuthenticatedUserProvider';
 import FloatButton from '../components/FloatButton';
 import listado from '../styles/ListadoStyles';
 import Historial from '../components/Historial';
+import {eliminarTodoDeTabla} from '../../db/enfermedades';
+import BarraBusqueda from '../components/BarraBusqueda';
 
-const Listado = () => {
+const Listado = ({route}) => {
   const navegacion = useNavigation();
   const {setUsuario} = contexUser();
+  const [recarga, setRecarga] = useState(false);
+  const [buscar, setBuscar] = useState();
+
   useEffect(() => {
-    const obtenerDatos = async () => {
-      const cache = await GetAlls();
-    };
-    obtenerDatos();
-  }, []);
+    if (route.params && route.params.reload) {
+      setRecarga(true);
+    }
+  }, [route]);
+
+  useEffect(() => {
+    if (recarga) {
+      const obtenerDatos = async () => {
+        await GetAlls();
+        setRecarga(false);
+      };
+      obtenerDatos();
+    }
+  }, [recarga]);
 
   const deleteTabla = () => {
-    eliminarTabla();
+    eliminarTodoDeTabla(callback => {
+      'callback eliminar: ', callback;
+    });
   };
+
   const aLogin = async () => {
-    console.log('presionado');
+    ('presionado');
     await RemoveCache({key: 'usuario'});
     setUsuario(null);
     //navegacion.navigate('Login');
   };
+  const getSearch = buscando => {
+    if (buscando) {
+      setBuscar(buscando);
+      setRecarga(true);
+    }
+  };
   return (
     <SafeAreaView style={listado.listado_cont}>
-      <Historial />
-      <TouchableOpacity onPress={(deleteTabla, aLogin)}>
-        <Text>eliminar</Text>
-      </TouchableOpacity>
+      <BarraBusqueda onSearch={getSearch} />
+      <Historial reload={recarga} buscar={buscar} />
       <FloatButton />
     </SafeAreaView>
   );

@@ -2,7 +2,7 @@ import SQLite from 'react-native-sqlite-storage';
 
 const db = SQLite.openDatabase(
   {name: 'historial', location: 'default'},
-  () => console.log('Base de datos abierta correctamente'),
+  () => ('Base de datos abierta correctamente'),
   error => console.error('Error al abrir la base de datos:', error),
 );
 
@@ -21,7 +21,7 @@ const crearTabla = () => {
           'INSERT INTO usuario (email, password) VALUES (?, ?)',
           ['jhon@mail.com', '77@1$'],
           (_, {rows}) => {
-            console.log('Registro inicial agregado correctamente.');
+            ('Registro inicial agregado correctamente.');
           },
           error => {
             console.error('Error al agregar el registro inicial:', error);
@@ -60,7 +60,7 @@ const eliminarTabla = () => {
       'DROP TABLE IF EXISTS historial',
       [],
       () => {
-        console.log('Tabla de usuarios eliminada correctamente.');
+        ('Tabla de usuarios eliminada correctamente.');
       },
       error => {
         console.error('Error al eliminar la tabla de usuarios:', error);
